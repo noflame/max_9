@@ -1,0 +1,187 @@
+#*****************************************************************************
+# Copyright 1986-2006 by mental images GmbH, Fasanenstr. 81, D-10623 Berlin,
+# Germany. All rights reserved.
+#*****************************************************************************
+# Author:   Zap 
+# Created:  25.01.2006
+# Module:   architectural
+# Purpose:  .mi declarations for architectural shaders
+#
+# Exports:
+#   mia_physicalskylight
+#   max gui attributes for architectural.dll
+#
+# History:
+#   10.05.06 zap:  Created
+#
+#****************************************************************************/
+
+#
+# 3ds max specific: Wrapper for mi_physicalsky
+# to act as a max "Skylight"
+#
+
+declare phenomenon "mia_physicalskylight" (
+        boolean "on",
+        scalar  "multiplier",
+        color   "rgb_unit_conversion",
+        scalar  "haze",
+        scalar  "redblueshift",
+        scalar  "saturation",
+
+        scalar  "horizon_height",
+        scalar  "horizon_blur",
+        color   "ground_color",
+        color   "night_color",
+
+        vector  "sun_direction",
+        light   "sun",   
+
+        # The following parameters are only useful
+        # when the shader is used as environment
+        scalar  "sun_disk_intensity",
+        scalar  "sun_disk_scale",
+        scalar  "sun_glow_intensity",
+
+        boolean "use_background",
+        shader  "background",
+
+        # For the lens/volume shader mode
+        scalar  "visibility_distance",
+        integer "flags"
+    )
+
+    shader "skyshader" "mia_physicalsky" (
+        "on"         = interface "on",
+        "multiplier" = interface "multiplier",
+        "rgb_unit_conversion" = interface "rgb_unit_conversion",
+        "haze" = interface "haze",
+        "redblueshift" = interface "redblueshift",
+        "saturation" = interface "saturation",
+
+        "horizon_height" = interface "horizon_height",
+        "horizon_blur"   = interface "horizon_blur",
+        "ground_color"   = interface "ground_color",
+        "night_color"    = interface "night_color",
+
+        "sun_direction"         = interface "sun_direction",
+        "sun"                   = interface "sun",
+        "sun_disk_intensity"    = interface "sun_disk_intensity",
+        "sun_disk_scale"        =  interface "sun_disk_scale",
+        "sun_glow_intensity"    = interface "sun_glow_intensity",
+        
+        "use_background"        = interface "use_background",
+        "background"            = interface "background",
+
+        "visibility_distance"   = interface "visibility_distance",
+        "flags"                 = interface "flags",
+        "y_is_up"               false
+    )
+    
+
+    shader "light" "max_TexturedSkylight" (
+       "TexSkyParams" {
+          "on" true,
+          "multiplier" 1.0,
+          "sky_color_map" "skyshader",
+          "sky_color_map_on" true,
+          "sky_color_map_amt" 100.0,
+          "sky_mode" 1
+       }
+    )
+
+    root   = "light"
+    # "volume" also works but this is faster...
+    lens   = "skyshader"
+
+    version 3
+    apply light	
+    
+    gui "gui_mia_physicalskylight" {
+       control "Global"  "Global" (
+           "hidden"
+       )
+       control "flags" "integer" (
+           "value" 0
+       )
+    }	    	
+end declare
+
+# GUI attributes
+
+declare phenomenon "arch_dummy" ()
+    gui "gui_arch_dummy" {
+       control "Global"  "Global" (
+           "hidden"
+       )   
+    }
+    
+    gui "gui_mia_physicalsun" {
+       control "Global"  "Global" (
+           "hidden"
+       )
+       control "automatic_photon_energy" "boolean" (
+           "value" off
+       )
+       control "shadow_softness" "scalar" (
+           "value" 1.0
+       )
+    }
+
+    gui "gui_mia_physicalsky" {
+       control "Global"  "Global" (
+           "hidden"
+       )
+       control "flags" "integer" (
+           "value" 0
+       )
+    }	    
+
+    gui "gui_mia_material" {
+       control "Global"  "Global" (
+          "uiName"      "mrArchMaterial",
+          "hidden"
+       )
+       control "hl_vs_refl_balance" "scalar" (
+	      "value" 1.0
+       )
+    }
+
+    gui "gui_mia_roundcorners" {
+       control "Global"  "Global" (
+           "uiName"      "Architectural: Round Corners Bump",
+           "category"    "Bump",
+           "addApply"    "bump",
+           "hidden"
+       )
+       control "radius" "scalar" (
+            "uiName" "Radius:",
+            "units"  "world",
+            "value" "5mm"
+       )
+       control "allow_different_materials" "boolean" (
+            "uiName" "Allow different materials",
+            "value" off
+       )
+       control "bump" "shader" (
+            "uiName" "Bump passthrough",
+       )
+    }
+    
+    gui "gui_mia_light_surface" {
+       control "Global"  "Global" (
+           "uiName"      "Architectural: Light Surface",
+           "hidden"
+       )
+       control "color" "color" (
+            "uiName" "Color",
+            "value"  1 1 1
+       )
+       control "weight" "scalar" (
+            "uiName" "Weight",
+            "value"  1
+       )
+    }
+    
+end declare
+
