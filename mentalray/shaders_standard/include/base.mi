@@ -1260,7 +1260,7 @@ declare shader
 			"helpLink" "/shd-1_7Data_Conversion.html#mibcoloralpha",
 		"uiName" "Color Alpha (base)",
 		"category" "Conversion",
-		"hidden"
+		#"hidden"
 		)
 		control "input" "color" (
 			"uiName" "Input",
@@ -1286,7 +1286,7 @@ declare shader
 			"helpLink" "/shd-1_7Data_Conversion.html#mibcoloraverage",
 		"uiName" "Color Average (base)",
 		"category" "Conversion",
-		"hidden"
+		#"hidden"
 		)
 		control "input" "color" (
 			"uiName" "Input",
@@ -1312,7 +1312,7 @@ declare shader
 			"helpLink" "/shd-1_7Data_Conversion.html#mibcolorintensity",
 		"uiName" "Color Intensity (base)",
 		"category" "Conversion",
-		"hidden"
+		#"hidden"
 		)
 		control "input" "color" (
 			"uiName" "Input",
@@ -1352,7 +1352,7 @@ declare shader
 			"helpLink" "/shd-1_7Data_Conversion.html#mibcolorinterpolate",
 		"uiName" "Color Interpolate (base)",
 		"category" "Conversion",
-		"hidden"
+		#"hidden"
 		)
 		control "input" "scalar" (
 			"uiName" "Input",
@@ -1458,7 +1458,7 @@ declare shader
 			"helpLink" "/shd-1_7Data_Conversion.html#mibcolormix",
 		"uiName" "Color Mix (base)",
 		"category" "Conversion",
-		"hidden"
+		#"hidden"
 		)
 		control "num" "integer" (
 			"uiName" "Number of Colors",
@@ -1606,7 +1606,7 @@ declare shader
 			"helpLink" "/shd-1_7Data_Conversion.html#mibcolorspread",
 			"uiName" "Color Spread (base)",
 			"category" "Conversion",
-			"hidden"
+			#"hidden"
 		)
 		control "input" "color" (
 			"uiName" "Input",
