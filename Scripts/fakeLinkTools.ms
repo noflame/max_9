@@ -26,9 +26,9 @@
 	)
 	*/
 	
-	global fakeLin_rut
+	global nfFakeLin_rut
 	
-	try ( destroydialog fakeLin_rut ) catch()
+	try ( destroydialog nfFakeLin_rut ) catch()
 	rollout fakeLin_rut "Fake Link Tool" width:162 height:300
 	(
 		checkButton lock_ckb "LOCK" pos:[9,11] width:144 height:30
@@ -40,21 +40,42 @@
 		
 		local pivotObj
 		local transObj = #()
-		local pivTM
+		local pivTM_old
+		local loc_trsObjTMs = #()
 		
 		on pickObj_pkb pick obj do
 		(
+			pickObj_pkb.text = obj.name			
+		)
+		
+		on lock_ckb change stat do
+		(
+			for obj in transObj collect 
+			(			
+				if obj.parent != undefined then 
+					obj.transform * inverse obj.parent.transform
+				else 
+					obj.transform
+			)
 			
+			lock_tim.active = stat
 		)
 		
 		on lock_tim tick do
 		(
-			for obj in transObj do
+			for i = 1 to transObj.count do
 			(
-				--
+				obj = transObj[i]
+				old_trsTM = loc_trsObjTMs[i]
+				
+				if obj.parent == undefined then 
+					obj.transform = loc_trsObjTMs
+				else
+				-- ¼g¨ì³o¸Ì
+					obj.transform = loc_trsObjTMs
 			)
 		)
 	)
 	
-	createdialog fakeLin_rut 
+	createdialog nfFakeLin_rut 
 )
