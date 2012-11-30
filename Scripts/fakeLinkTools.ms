@@ -29,7 +29,7 @@
 	global nfFakeLin_rut
 	
 	try ( destroydialog nfFakeLin_rut ) catch()
-	rollout fakeLin_rut "Fake Link Tool" width:162 height:300
+	rollout nfFakeLin_rut "Fake Link Tool" width:162 height:300
 	(
 		checkButton lock_ckb "LOCK" pos:[9,11] width:144 height:30
 		pickbutton pickObj_pkb "" pos:[9,46] width:144 height:22
@@ -71,8 +71,7 @@
 				if obj.parent == undefined then 
 					obj.transform = loc_trsObjTMs
 				else
-				-- ¼g¨ì³o¸Ì
-					obj.transform = loc_trsObjTMs
+					obj.transform = loc_trsObjTMs * obj.transform
 			)
 		)
 	)
