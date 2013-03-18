@@ -1,0 +1,1515 @@
+#****************************************************************************
+# Author:	Pavel Ledin (aka Puppet) puppet@rambler.ru
+# Created:	19.06.04
+# Module:	shaders_p
+# Purpose:	.mi declarations for shaders_p (for 3dsmax)
+# Version:	3.1.2
+#****************************************************************************
+
+# guard against multiple inclusions
+$ifndef "shaders_p_mi_included"
+set "shaders_p_mi_included" "true"
+
+min version "3.4"
+max version "3.5.99"
+
+declare shader
+        color "p_buffer_writer" (
+		color "render",
+		boolean "enable_fb0",
+		color "buffer_0",
+		boolean "enable_fb1",
+		color "buffer_1",
+		boolean "enable_fb2",
+		color "buffer_2",
+		boolean "enable_fb3",
+		color "buffer_3",
+		boolean "enable_fb4",
+		color "buffer_4",
+		boolean "enable_fb5",
+		color "buffer_5",
+		boolean "enable_fb6",
+		color "buffer_6",
+		boolean "enable_fb7",
+		color "buffer_7"
+	)
+        version 2
+        apply material
+	gui "gui_p_buffer_writer" {
+		control "Global" "Global" (
+			"uiName" "p_buffer_writer",
+			"category" "Illumination"
+		)
+	control "enable_fb0" 	"boolean" ("uiName" "Enable Buffer 0", "value" 0)
+	control "enable_fb1" 	"boolean" ("uiName" "Enable Buffer 1", "value" 0)
+	control "enable_fb2" 	"boolean" ("uiName" "Enable Buffer 2", "value" 0)
+	control "enable_fb3" 	"boolean" ("uiName" "Enable Buffer 3", "value" 0)
+	control "enable_fb4" 	"boolean" ("uiName" "Enable Buffer 4", "value" 0)
+	control "enable_fb5" 	"boolean" ("uiName" "Enable Buffer 5", "value" 0)
+	control "enable_fb6" 	"boolean" ("uiName" "Enable Buffer 6", "value" 0)
+	control "enable_fb7" 	"boolean" ("uiName" "Enable Buffer 7", "value" 0)	
+	control "render" 	"color" ("uiName" "Render", "value" 1.0 1.0 1.0)
+	control "buffer_0" 	"color" ("uiName" "Buffer 0", "value" 0.0 0.0 0.0)
+	control "buffer_1" 	"color" ("uiName" "Buffer 1", "value" 0.0 0.0 0.0)
+	control "buffer_2" 	"color" ("uiName" "Buffer 2", "value" 0.0 0.0 0.0)
+	control "buffer_3" 	"color" ("uiName" "Buffer 3", "value" 0.0 0.0 0.0)
+	control "buffer_4" 	"color" ("uiName" "Buffer 4", "value" 0.0 0.0 0.0)
+	control "buffer_5" 	"color" ("uiName" "Buffer 5", "value" 0.0 0.0 0.0)
+	control "buffer_6" 	"color" ("uiName" "Buffer 6", "value" 0.0 0.0 0.0)
+	control "buffer_7" 	"color" ("uiName" "Buffer 7", "value" 0.0 0.0 0.0)
+	}
+end declare
+
+declare shader
+        color "p_z" (
+		scalar 	"near",			#: default 1 min 0.0
+		scalar 	"far",			#: default 20 min 0.0
+		scalar 	"opacity",		#: default 1.0 min 0.0 max 1.0
+		scalar	"reflection",		#: min 0.0 max 1.0	
+		scalar	"shiny_reflect",
+		scalar	"refraction",		#: min 0.0 max 1.0
+		scalar	"shiny_refract",
+		scalar	"ior",			#: default 1.5 min 0.0
+		boolean "use_float",
+		boolean "invert",
+		boolean "split_color_result",
+		boolean "alpha_mult"		#: shortname "almu" default 1
+	)
+	apply material
+        version 2
+	gui "gui_p_z" {
+		control "Global" "Global" (
+			"uiName" "p_z",
+			"category" "Illumination"
+		)
+        control "near" 		"scalar" ("uiName" "Near Clip Plane", "value" 1.0)
+        control "far" 		"scalar" ("uiName" "Far Clip Plane", "value" 20.0)
+        control "opacity" 	"scalar" ("uiName" "Opacity", "value" 1.0, "range" 0.0 1.0)        
+        control "reflection" 	"scalar" ("uiName" "Reflection", "value" 0.0, "range" 0.0 1.0) 
+        control "shiny_reflect" "scalar" ("uiName" "Shiny Reflection", "value" 0.0) 
+        control "refraction" 	"scalar" ("uiName" "Refraction", "value" 0.0, "range" 0.0 1.0)
+        control "shiny_refract" "scalar" ("uiName" "Shiny Refraction", "value" 0.0)
+        control "ior" 		"scalar" ("uiName" "IOR", "value" 1.5)
+        control "use_float" 		"boolean" ("uiName" "Float Point Output", "value" 0)
+        control "invert" 		"boolean" ("uiName" "Invert Result", "value" 0)
+        control "split_color_result" 	"boolean" ("uiName" "Split Color Result", "value" 0)
+        control "alpha_mult" 		"boolean" ("uiName" "Premultiply Alpha", "value" 1) 
+        }
+end declare
+
+declare shader
+	color "p_fg_light" (
+		color "color" 		#: default 1.0 1.0 1.0
+	)
+	version 2
+	apply material
+	gui "gui_p_fg_light" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_fg_light",
+			"category" "Illumination",
+			"hidden"
+		)
+        control "color" "color" ("uiName" "Color", "value" 1.0 1.0 1.0)
+        }	
+end declare
+
+declare shader
+	color "p_constant" (
+		color "color", 		#: default 1.0 1.0 1.0
+		boolean	"override_alpha",
+		scalar "alpha"		#: default 1.0
+	)
+	version 2
+	apply material
+	gui "gui_p_constant" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_constant",
+			"category" "Illumination"
+		)
+        control "color" 		"color" ("uiName" "Color", "value" 1.0 1.0 1.0)
+        control "override_alpha" 	"boolean" ("uiName" "Override Alpha", "value" 0)
+        control "alpha" 		"scalar" ("uiName" "Alpha", "value" 0.0)
+        }
+end declare
+
+declare shader
+	color "p_facing_ratio" (
+		color "color1", 		#: default 1.0 1.0 1.0
+		color "color2", 		#: default 0.0 0.0 0.0
+		scalar	"interpolation"		#: default 1.0
+	)
+	version 2
+	apply texture
+	gui "gui_p_facing_ratio" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_facing_ratio",
+			"category" "Texture"
+		)
+	control "color1" "color" ("uiName" "Color 1", "value" 1.0 1.0 1.0)
+	control "color2" "color" ("uiName" "Color 2", "value" 0.0 0.0 0.0)
+	control "interpolation" "scalar" ("uiName" "Gamma", "value" 1.0)
+	}	
+end declare
+
+declare shader
+	color "p_fg_no_light" (
+		color "color" 		#: default 1.0 1.0 1.0
+	)
+	version 2
+	apply material
+	gui "gui_p_fg_no_light" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_fg_no_light",
+			"category" "Illumination",
+			"hidden"
+		)
+	control "color" "color" ("uiName" "Color", "value" 1.0 1.0 1.0)
+	}
+end declare
+
+declare shader
+	color "p_color_plus_alpha" (
+		color "color",
+		scalar "alpha", 		#: default 1.0
+		scalar "ior"			#: default 1.0
+	)
+	version 2
+	apply material
+	gui "gui_p_color_plus_alpha" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_color_plus_alpha",
+			"category" "Illumination"
+		)
+	control "color" "color" ("uiName" "Color", "value" 0.3 0.3 1.0)
+	control "alpha" "scalar" ("uiName" "Alpha", "value" 1.0)
+	control "ior" "scalar" ("uiName" "IOR", "value" 1.0)
+	}	
+end declare
+
+declare shader
+	color "p_motion_to_rgb" (
+		integer	"mode"		#: default 1 min 0 max 2
+	)
+	version 3
+	apply material
+	gui "gui_p_motion_to_rgb" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_motion_to_rgb",
+			"category" "Illumination"
+		)
+	control "mode" "integer" ("uiName" "Mode", "value" 1, "range" 0 2)	
+	}
+end declare
+
+declare shader
+	color "p_irradiance" (
+		color "irradiance_color"	#: default 1.0 1.0 1.0
+	)
+	version 2
+	apply texture
+	gui "gui_p_irradiance" {
+		control "Global" "Global" (
+			"uiName" "p_irradiance",
+			"category" "Sample Compositing"
+		)
+	control "irradiance_color" "color" ("uiName" "Irradiance Color", "value" 1.0 1.0 1.0)	
+	}	
+end declare
+
+declare shader
+	scalar "p_color_to_float" (
+		color "color",	
+		integer	"conversion",		#: default 4 min 0 max 5
+		scalar "clamp_min",		#: default 0.0
+		scalar "clamp_max",		#: default 1.0
+		boolean	"invert"		
+	)
+	version 2
+	apply texture
+	gui "gui_p_color_to_float" {
+		control "Global" "Global" (
+			"uiName" "p_color_to_float",
+			"category" "Conversion"
+		)
+	control "color" "color" ("uiName" "Input Color", "value" 0.0 0.0 0.0)
+	control "conversion" "integer" ("uiName" "Conversion", "value" 4, "range" 0 5)
+	control "clamp_min" "scalar" ("uiName" "Clamp Output Min", "value" 0.0)
+	control "clamp_max" "scalar" ("uiName" "Clamp Output Max", "value" 1.0)
+	control "invert" "boolean" ("uiName" "Invert Result", "value" 0)
+	}		
+end declare
+
+declare shader
+	color "p_saturation" (
+		color "color",		
+		color "factor",			#: default 0.5 0.5 0.5
+		integer "saturation_mode" 	#: default 1 min 0 max 1
+	)
+	version 2
+	apply texture
+	gui "gui_p_saturation" {
+		control "Global" "Global" (
+			"uiName" "p_saturation",
+			"category" "Conversion",
+			"hidden"
+		)
+	control "color" "color" ("uiName" "Input Color", "value" 0.0 0.0 0.0)
+	control "factor" "color" ("uiName" "Factor", "value" 0.5 0.5 0.5)
+	control "saturation_mode" "integer" ("uiName" "Saturation Mode", "value" 1, "range" 0 1)
+	}
+end declare
+
+declare shader
+        color "p_fisheye" (
+        scalar "power"		#: default 0.6
+        )
+        apply lens
+        version 2
+	gui "gui_p_fisheye" {	
+		control "Global" "Global" (
+			"uiName" "p_fisheye"
+		)
+	control "power" "scalar" ("uiName" "Power", "value" 0.6)	
+	}        
+end declare
+
+declare shader
+	color "p_CSG" (
+		color	"color_A",
+		color	"color_B",
+		string "object_A",
+		string "object_B",
+		integer	"mode", 		#: default 1 min 0 max 2
+		boolean	"check_camera"		#: default 0
+	)
+	version 2
+	apply material
+	gui "gui_p_CSG" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_CSG",
+			"category" "Illumination"
+		)
+	control "color_A" "color" ("uiName" "Color A", "value" 1.0 0.0 0.0)
+	control "color_B" "color" ("uiName" "Color B", "value" 0.0 0.0 1.0)
+	control "object_A" "string" ("uiName" "Object A")
+	control "object_B" "string" ("uiName" "Object B")
+	control "mode" "integer" ("uiName" "Mode", "value" 1, "range" 0 2)
+	control "check_camera" "boolean" ("uiName" "Check Camera")
+	}	
+end declare
+
+declare shader
+	color "p_shadow" (
+		boolean		"self_shadow",	#: default 1	
+		integer		"mode",       	#: softmin 0 softmax 2 default 0
+		array light	"lights" 
+	)
+	version 2
+	apply material
+	gui "gui_p_shadow" {
+		control "Global" "Global" (
+			"uiName" "p_shadow",
+			"category" "Sample Compositing"
+		)
+	control "self_shadow" "boolean" ("uiName" "Self Shadow", "value" 1)
+	control "mode" "integer" ("uiName" "Mode", "value" 0, "range" 0 2)
+	control "lights" "array light" ("uiName" "Lights")	
+	}	
+end declare
+
+declare shader
+	color "p_bake_read" (
+		array string "objects",
+		vector "coord",
+		array color texture "textures" 
+	)
+	version 2
+	apply texture
+	gui "gui_p_bake_read" {
+		control "Global" "Global" (
+			"uiName" "p_bake_read",
+			"category" "Texture"
+		)
+	control "objects" "array string" ("uiName" "Objects")
+	control "coord" "vector" ("uiName" "Coord")
+	control "textures" "array color texture" ("uiName" "Textures")
+	}
+end declare
+
+declare shader
+	color "p_ray_type" (
+		boolean	"enable_reflection",
+		integer "reflection_depth",	#: default 1 min 0 softmin 1 softmax 10
+		boolean	"enable_refraction",
+		integer "refraction_depth",	#: default 1 min 0 softmin 1 softmax 10
+		boolean	"enable_transparency",
+		integer "transparency_depth",	#: default 1 min 0 softmin 1 softmax 10
+		boolean	"enable_finalgather",
+		boolean	"enable_environment",
+		boolean	"enable_shadow",	
+		color "eye",
+		color "reflection",
+		color "refraction",
+		color "transparency",
+		color "finalgather",
+		color "environment",
+		color "shadow"	
+	)
+	version 3
+	apply material
+	gui "gui_p_ray_type" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_ray_type",
+			"category" "Illumination"
+		)
+	control "enable_reflection" "boolean" ("uiName" "Enable Reflection", "value" 0)	
+	control "reflection_depth" "integer" ("uiName" "Reflection Depth", "value" 1, "range" 0 20)	
+	control "enable_refraction" "boolean" ("uiName" "Enable Refraction", "value" 0)
+	control "refraction_depth" "integer" ("uiName" "Refraction Depth", "value" 1, "range" 0 20)	
+	control "enable_transparency" "boolean" ("uiName" "Enable Transparency", "value" 0)
+	control "transparency_depth" "integer" ("uiName" "Transparency Depth", "value" 1, "range" 0 20)	
+	control "enable_finalgather" "boolean" ("uiName" "Enable Final Gather", "value" 0)
+	control "enable_environment" "boolean" ("uiName" "Enable Environment", "value" 0)
+	control "enable_shadow" "boolean" ("uiName" "Enable Shadow", "value" 0)	
+	control "eye" "color" ("uiName" "Eye")
+	control "reflection" "color" ("uiName" "Reflection")
+	control "refraction" "color" ("uiName" "Refraction")
+	control "transparency" "color" ("uiName" "Transparency")
+	control "finalgather" "color" ("uiName" "Final Gather")
+	control "environment" "color" ("uiName" "Environment")
+	control "shadow" "color" ("uiName" "Shadow")
+	}
+end declare
+
+declare shader
+	color "p_MegaTK" (
+		color		"cSurface",		#: default 0.5 0.6 0.8 1.		
+		color		"cOpacity",		#: default 1. 1. 1. 1.
+		integer		"opacity_conversion",	#: default 3 min 0 max 5
+		struct "Constant Diffuse" { 
+			boolean		"use_constant",		
+			scalar		"cConst",		#: default 0.5 softmin 0. softmax 1.
+			color		"c_color"		#: default 0.8, 0.8, 0.8
+		},
+		struct "Simple Diffuse" { 
+			boolean		"use_simple_diffuse",	#: default 1
+			scalar		"cds",			#: default 0.9 softmin 0. softmax 1.
+			string		"sd_light_category"
+		},
+		struct "Fur Diffuse" {
+			boolean		"use_fur_diffuse",	#: default 0
+			scalar		"cdf",			#: default 1.5 softmin 0. softmax 2.
+			scalar		"f_d_angle",		#: default 0. min 0.0 max 360.0
+			color 		"f_skinColor",          #: default 0.4 0.3 0.25
+			scalar 		"f_hairDensity",         #: default 150 min 1 max 1000
+			scalar 		"f_backwardScatering",   #: default 0.80 min 0 max 1
+			scalar 		"f_forwardScattering",   #: default 0.20 min 0 max 1
+			scalar 		"f_hairOverHairShadow",  #: default 0.50 min 0 max 1
+			scalar 		"f_shadowAttenuation",   #: default 0.50 min 0 max 1
+			scalar 		"f_startShadowCos",      #: default 0.00 min 0 max 1
+			scalar 		"f_endShadowCos",        #: default 0.50 min 0 max 1
+			scalar 		"f_hairLength",          #: default 0.15 min 0 max 1
+			scalar 		"f_hairBaseRadius",      #: default 0.02 min 0 max 1
+			scalar 		"f_hairTipRadius",       #: default 0.00 min 0 max 1
+			string		"fd_light_category"
+                },
+		struct "Phong Specular" {
+			boolean		"use_phong_specular",	#: default 1
+			scalar		"p_cS",			#: default 0.7 softmin 0. softmax 1.
+			color		"p_specular",		#: default .5, .5, .5, 1.
+			scalar		"p_exponent",		#: default 50.0 softmin 0. softmax 100.
+			string		"p_light_category"
+		},
+		struct "Blinn Specular" {
+			boolean		"use_blinn_specular",		
+			scalar		"b_cS",			#: default 1. softmin 0. softmax 1.
+			color		"b_specular",		#: default 1., 1., 1., 1.
+			scalar		"b_eccentricity",	#: softmin 0 softmax 1 default .3
+			scalar		"b_specularRollOff",	#: softmin 0 softmax 4. default 0.6..
+			string		"b_light_category"
+		},
+		struct "Velvet Specular" {
+			boolean		"use_velvet_specular",
+			scalar		"v_cS",			#: default 0.8 softmin 0. softmax 1.	
+			color		"v_sheen_color",	#: default 0.35 0.35 0.35
+			scalar		"v_backscatter",	#: default 0.1 min 0 max 1
+			scalar		"v_edginess",		#: default 10  min 0 max 100
+			scalar		"v_roughness",		#: default 0.1 min 0 max 1
+			string		"v_light_category"
+		},
+		struct "Wet Specular" {
+			boolean		"use_wet_specular",
+			scalar		"we_cS",		#: default 0.8 softmin 0. softmax 1.
+			color		"we_specular",		#: default .5, .5, .5, 1.
+			scalar		"we_roughness",		#: default 0.1 min 0. max 1.
+			scalar		"we_sharpness",		#: default 0.98 min 0. max 1.
+			string		"we_light_category"	
+		},
+		struct "Ward Specular" {
+			boolean		"use_ward_specular",
+			scalar		"w_cS",			#: default 0.8 softmin 0. softmax 1.
+			color		"w_glossy",		#: default .5, .5, .5, 1.
+			scalar		"w_shiny_u",		#: softmin 0 softmax 100 default 50
+			scalar		"w_shiny_v",		#: softmin 0 softmax 100 default 5
+			boolean		"w_use_deriv",		#: default 1		
+			vector		"w_u", 
+			vector		"w_v", 
+			string		"w_light_category"
+		},
+		struct "Fur Specular" {
+			boolean		"use_fur_specular",		
+			scalar		"f_cS",			#: default 0.4 softmin 0. softmax 1.
+			scalar		"f_s_angle",		#: default 0. min 0.0 max 360.0
+			color 		"f_specular1Color",       #: default 0.8 0.8 0.75
+			scalar 		"f_specular1Exponent",	  #: default 100 min 1 max 1500
+			color 		"f_specular2Color",       #: default 0.5 0.4 0.4
+			scalar 		"f_specular2Exponent",   #: default 20 min 1 max 1500
+			scalar 		"f_tangentBreakupAmt",   #: default 0.1 min 0. max 1.
+			scalar 		"f_tangentBreakup",      #: default 100.0 min 0.01 max 1000.0
+			string		"f_light_category"
+                },
+                struct "Indirect Illumination" {
+			boolean		"use_indirect_illum",		#: default 1
+			color		"cInd",				#: default 1., 1., 1., 1.
+			scalar		"saturation_indirect",		#: default 1. min 0. max 1.
+			boolean		"path_indirect",		#: default 0
+			integer		"path_indirect_samples", 	#: default 4 min 0 max 512
+			integer		"path_indirect_depth", 		#: default 2 min 0 max 6
+			boolean		"ind_ignore_bump"
+		},
+		struct "Ambient" {
+			boolean		"use_ambient",
+			scalar		"cAmb",			#: default 0.2 min 0. softmin 0. softmax 1.
+			color		"ambient_color"		#: default 1. 1. 1.
+		},
+		struct "Occlusion" {
+			boolean		"use_occlusion",		
+			color		"o_base_color",		#: default 1. 1. 1.
+			color		"o_dirt_color",		
+			scalar		"o_spread",		#: default 88. min 0. max 180. softmax 90.
+			integer   	"o_samples",		#: default 16 min 0 softmax 128	
+			scalar		"o_near_clip",		#: default 1. softmin 0. softmax 10.
+			scalar		"o_far_clip",		#: default 10. softmin 0. softmax 100.
+			scalar		"o_falloff_gain",	#: default 1. min 0. max 1.
+			scalar		"o_gamma",		#: default 1. min 0.01 max 50.	
+			vector		"o_basis",	
+			scalar		"o_basis_blend",	#: default 0. min 0. max 1.
+			integer		"o_opacity_mode",	#: default 0 min 0 max 2
+			boolean		"o_bent_normal",	#: default 1
+			integer		"o_bent_space",
+			boolean		"o_trace_environment",	
+			boolean		"o_inv_sec_illum",	#: default 1		
+			scalar		"effect_diffuse",	#: default 0.5 min 0 max 1
+			scalar		"effect_specular",	#: default 0.5 min 0 max 1
+			scalar		"effect_indirect",	#: default 0.5 min 0 max 1
+			scalar		"effect_ambient",	#: default 1. min 0 max 1
+			color		"custom_occlusion"	#: default 1. 1. 1.
+		},
+		struct "Reflection" {
+			boolean		"use_reflection",
+			scalar		"cReflect",		#: default 0.5 min 0 softmin 0 softmax 1 
+			color		"glossy_refl",		#: default 1., 1., 1.
+			scalar		"shiny_refl",		#: default 0. min 0 softmin 0 softmax 100
+			boolean		"anisotropic_reflect",
+			scalar		"shiny_refl_u",		#: default 5. min 0 softmin 0 softmax 100
+			scalar		"shiny_refl_v",		#: default 100. min 0 softmin 0 softmax 100
+			integer		"samples_refl",		#: default 1 softmin 0 softmax 16
+			scalar		"fresnel_refl",		#: default 1. softmin 0. softmax 1.
+			scalar		"falloff_start_refl",	#: default 0. min 0. softmin 0. softmax 100.
+			scalar		"falloff_stop_refl",	#: default 0. min 0. softmin 0. softmax 100.
+			boolean		"falloff_to_color_refl",
+			color		"falloff_color_refl",	#: default 0. 0. 0. 1. 
+			scalar 		"diff_minus_reflect", 	#: default 1. min 0 max 1
+			color		"custom_reflect"
+		},
+		struct "Refraction" {
+			boolean		"use_refraction",
+			scalar		"cRefract",		#: default 0.5 min 0 softmin 0 softmax 1 
+			color		"glossy_refr",		#: default 1., 1., 1.
+			scalar		"shiny_refr",		#: default 0. min 0 softmin 0 softmax 100
+			boolean		"anisotropic_refract",	#: default 0. min 0 softmin 0 softmax 100
+			scalar		"shiny_refr_u",		#: default 5. min 0 softmin 0 softmax 100
+			scalar		"shiny_refr_v",		#: default 100. min 0 softmin 0 softmax 100
+			integer		"samples_refr",		#: default 1 softmin 0 softmax 16			
+			scalar		"ior_in_refr",		#: default 1.33 min 0 softmin 0 softmax 3
+			color		"refr_absorb_in",	#: default 1. 1. 1. 1.
+			scalar		"ior_out_refr",		#: default 1. min 0 softmin 0 softmax 3
+			color		"refr_absorb_out",	#: default 1. 1. 1. 1. 
+			scalar		"fresnel_refr",		#: default 1. softmin 0. softmax 1.
+			scalar		"falloff_start_refr",	#: default 0. min 0. softmin 0. softmax 100.
+			scalar		"falloff_stop_refr",	#: default 0. min 0. softmin 0. softmax 100.
+			boolean		"falloff_to_color_refr",
+			color		"falloff_color_refr",	#: default 0. 0. 0. 1. 				
+			scalar 		"diff_minus_refract", 	#: default 1. min 0 max 1
+			color		"custom_refract"
+		},
+		struct "Reflect/Refract Optimization" {
+			boolean   	"russian_roulette",	#: default 1
+			integer   	"samples_decrease",	#: default 2
+			integer 	"reflection_depth",	#: default 0 min 0 softmin 0 softmax 10
+			integer 	"refraction_depth"	#: default 0 min 0 softmin 0 softmax 10
+		},
+		struct "Incandescence" {
+			boolean		"use_incandescence",
+			scalar		"cInc",			#: default 0.2 softmin 0. softmax 1.
+			color		"incandescence"		#: default 1. 1. 1.
+		},
+		struct "Special Channels" {
+			boolean		"use_SpeciaC1",
+			color		"specialC1",
+			boolean		"use_SpeciaC2",
+			color		"specialC2",
+			boolean		"use_SpeciaC3",
+			color		"specialC3",
+			boolean		"use_SpeciaC4",
+			color		"specialC4"			
+		},
+		struct "Normal" {
+			boolean		"use_normal",
+			boolean		"add_to_normal",
+			vector		"input_normal"					
+		},
+		struct "Z" {
+			boolean		"use_z",		#: default 1		
+			scalar 		"near",			#: default 1 min 0.0 softmin 0. softmax 100.
+			scalar 		"far",			#: default 20 min 0.0 softmin 0. softmax 100.
+			boolean 	"opacity_z",		#: default 1
+			boolean		"reflection_z",		#: default 1	
+			boolean		"refraction_z",		#: default 1
+			boolean 	"use_float_z",
+			boolean 	"invert_z"		#: default 1
+		},
+		struct "Custom Buffers" {
+			boolean 	"shading_pass",		#: default 1
+			integer		"shading_buf",		#: default 20 min 0 		
+			boolean 	"color_occlusion_pass",	#: default 1
+			integer		"color_occlusion_buf",	#: default 21 min 0 
+			boolean 	"diffuse_pass",		#: default 1
+			integer		"diffuse_buf",		#: default 22 min 0
+			boolean 	"diffuse_shadow_pass",	#: default 1
+			integer		"diffuse_shadow_buf",	#: default 23 min 0
+			boolean 	"specular_pass",	#: default 1
+			integer		"specular_buf",		#: default 24 min 0
+			boolean 	"specular_shadow_pass",	#: default 1
+			integer		"specular_shadow_buf",	#: default 25 min 0
+			boolean 	"occlusion_pass",	#: default 1
+			integer		"occlusion_buf",	#: default 26 min 0
+			boolean 	"indirect_illum_pass",	#: default 1
+			integer		"indirect_illum_buf",	#: default 27 min 0
+			boolean 	"ambient_pass",		#: default 1
+			integer		"ambient_buf",		#: default 28 min 0	
+			boolean 	"amb_occlusion_pass",	#: default 1
+			integer		"amb_occlusion_buf",	#: default 29 min 0		
+			boolean 	"reflect_pass",		#: default 1		
+			integer		"reflect_buf",		#: default 30 min 0
+			boolean 	"refract_pass",		#: default 1
+			integer		"refract_buf",		#: default 31 min 0
+			boolean 	"incandescence_pass",	#: default 1
+			integer		"incandescence_buf",	#: default 32 min 0
+			boolean 	"z_pass",		#: default 1
+			integer		"z_buf",		#: default 33 min 0		
+			boolean 	"bent_normal_pass",	#: default 1
+			integer		"bent_normal_buf",	#: default 34 min 0	
+			boolean 	"specialC1_pass",	#: default 1
+			integer		"specialC1_buf",	#: default 35 min 0
+			boolean 	"specialC2_pass",	#: default 1
+			integer		"specialC2_buf",	#: default 36 min 0 
+			boolean 	"specialC3_pass",	#: default 1
+			integer		"specialC3_buf",	#: default 37 min 0
+			boolean 	"specialC4_pass",	#: default 1
+			integer		"specialC4_buf"		#: default 38 min 0 			
+		},
+		struct "Lights" {
+			integer		"mode",      		#: softmin 0 softmax 2 default 0
+			array light	"lights"
+		}
+	)
+	version 3
+	derivative 1 
+	apply material
+	gui "gui_p_MegaTK" {
+		control "Global" "Global" (
+			"addApply" "illum",
+			"uiName" "p_MegaTK",
+			"category" "Illumination"
+		)
+	control "cSurface" "color" ("uiName" "cSurface", "value" 0.5 0.6 0.8 1.0)
+	control "cOpacity" "color" ("uiName" "cOpacity", "value" 1.0 1.0 1.0 1.0)
+	control "opacity_conversion" "integer" ("uiName" "Opacity Conversion", "value" 3, "range" 0 5)
+	control "Constant Diffuse" "struct" {
+		control "use_constant" "boolean" ("uiName" "Use Constant", "value" 0)
+		control "cConst" "scalar" ("uiName" "Coefficient Constant", "value" 0.5)
+		control "c_color" "color" ("uiName" "Constant Color", "value" 0.8 0.8 0.8)
+	}
+	control "Simple Diffuse" "struct" {
+		control "use_simple_diffuse" "boolean" ("uiName" "Use Simple Diffuse", "value" 1)
+		control "cds" "scalar" ("uiName" "Coefficient Simple Diffuse", "value" 0.9)
+		control "sd_light_category" "string" ("uiName" "Light Category")
+	}
+	control "Fur Diffuse" "struct" {
+		control "use_fur_diffuse" "boolean" ("uiName" "Use Fur Diffuse", "value" 0)
+		control "cdf" "scalar" ("uiName" "Coefficient Fur Diffuse", "value" 1.5)
+		control "f_d_angle" "scalar" ("uiName" "Angle", "value" 0.0, "range" 0.0 360.0)
+		control "f_skinColor" "color" ("uiName" "Skin Color", "value" 0.4 0.3 0.25)
+		control "f_hairDensity" "scalar" ("uiName" "Hair Density", "value" 150.0, "range" 1.0 1000.0)
+		control "f_backwardScatering" "scalar" ("uiName" "Backward Scattering", "value" 0.8, "range" 0.0 1.0)
+		control "f_forwardScattering" "scalar" ("uiName" "Forward Scattering", "value" 0.2, "range" 0.0 1.0)
+		control "f_hairOverHairShadow" "scalar" ("uiName" "Hair Over Hair Shadow", "value" 0.5, "range" 0.0 1.0)
+		control "f_shadowAttenuation" "scalar" ("uiName" "Shadow Attenuation", "value" 0.5, "range" 0.0 1.0)
+		control "f_startShadowCos" "scalar" ("uiName" "Start Shadow Cos", "value" 0.0, "range" 0.0 1.0)
+		control "f_endShadowCos" "scalar" ("uiName" "End Shadow Cos", "value" 0.5, "range" 0.0 1.0)
+		control "f_hairLength" "scalar" ("uiName" "Hair Length", "value" 0.15, "range" 0.0 1.0)
+		control "f_hairBaseRadius" "scalar" ("uiName" "Hair Base Radius", "value" 0.02, "range" 0.0 1.0)
+		control "f_hairTipRadius" "scalar" ("uiName" "Hair Tip Radius", "value" 0.0, "range" 0.0 1.0)	
+		control "fd_light_category" "string" ("uiName" "Light Category")
+	}
+	control "Phong Specular" "struct" {	
+		control "use_phong_specular" "boolean" ("uiName" "Use Phong Specular", "value" 1)	
+		control "p_cS" "scalar" ("uiName" "Coefficient Phong", "value" 0.7)
+		control "p_specular" "color" ("uiName" "Phong Specular", "value" 0.5 0.5 0.5)
+		control "p_exponent" "scalar" ("uiName" "Exponent", "value" 50.0)
+		control "p_light_category" "string" ("uiName" "Light Category")
+	}	
+	control "Blinn Specular" "struct" {
+		control "use_blinn_specular" "boolean" ("uiName" "Use Blinn Specular", "value" 0)
+		control "b_cS" "scalar" ("uiName" "Coefficient Blinn", "value" 1.0)
+		control "b_specular" "color" ("uiName" "Blinn Specular", "value" 1.0 1.0 1.0)
+		control "b_eccentricity" "scalar" ("uiName" "Blinn Eccentricity", "value" 0.3)
+		control "b_specularRollOff" "scalar" ("uiName" "Blinn Specular Roll Off", "value" 0.6)
+		control "b_light_category" "string" ("uiName" "Light Category")
+	}
+	control "Velvet Specular" "struct" {
+		control "use_velvet_specular" "boolean" ("uiName" "Use Velvet Specular", "value" 0)
+		control "v_cS" "scalar" ("uiName" "Coefficient Velvet", "value" 0.8)
+		control "v_sheen_color" "color" ("uiName" "Sheen Color", "value" 0.35 0.35 0.35)
+		control "v_backscatter" "scalar" ("uiName" "Backscatter", "value" 0.1)
+		control "v_edginess" "scalar" ("uiName" "Edginess", "value" 10.0)
+		control "v_roughness" "scalar" ("uiName" "Roughness", "value" 0.1)
+		control "v_light_category" "string" ("uiName" "Light Category")
+	}
+	control "Wet Specular" "struct" {
+		control "use_wet_specular" "boolean" ("uiName" "Use Wet Specular", "value" 0)
+		control "we_cS" "scalar" ("uiName" "Coefficient Wet", "value" 0.8)		
+		control "we_specular" "color" ("uiName" "Specular", "value" 0.5 0.5 0.5 1.0)		
+		control "we_roughness" "scalar" ("uiName" "Roughness", "value" 0.1, "range" 0 1)		
+		control "we_sharpness" "scalar" ("uiName" "Sharpness", "value" 0.98)
+		control "we_light_category" "string" ("uiName" "Light Category")
+	}			
+	control "Ward Specular" "struct" {
+		control "use_ward_specular" "boolean" ("uiName" "Use Ward Specular", "value" 0)
+		control "w_cS" "scalar" ("uiName" "Coefficient Ward", "value" 0.8)
+		control "w_glossy" "color" ("uiName" "Glossy", "value" 0.5 0.5 0.5 1.0)
+		control "w_shiny_u" "scalar" ("uiName" "Shiny U", "value" 50.0)
+		control "w_shiny_v" "scalar" ("uiName" "Shiny V", "value" 5.0)
+		control "w_use_deriv" "booleanr" ("uiName" "Use Surface Deriv", "value" 0)
+		control "w_u" "vector" ("uiName" "U", "value" 0.0 0.0 0.0)
+		control "w_v" "vector" ("uiName" "V", "value" 0.0 0.0 0.0)
+		control "w_light_category" "string" ("uiName" "Light Category")
+	}
+	control "Fur Specular" "struct" {
+		control "use_fur_specular" "boolean" ("uiName" "Use Fur Specular", "value" 0)
+		control "f_cS" "scalar" ("uiName" "Coefficient Fur Specular", "value" 0.4)
+		control "f_s_angle" "scalar" ("uiName" "Angle", "value" 0.0, "range" 0.0 360.0)
+		control "f_specular1Color" "color" ("uiName" "Specular1 Color", "value" 0.8 0.8 0.75)
+		control "f_specular1Exponent" "scalar" ("uiName" "Specular1 Exponent", "value" 100.0, "range" 1.0 1500.0)
+		control "f_specular2Color" "color" ("uiName" "Specular2 Color", "value" 0.5 0.4 0.4)
+		control "f_specular2Exponent" "scalar" ("uiName" "Specular2 Exponent", "value" 20.0, "range" 1.0 1500.0)
+		control "f_tangentBreakupAmt" "scalar" ("uiName" "Tangent Breakup Amt", "value" 0.1, "range" 0.0 1.0)
+		control "f_tangentBreakup" "scalar" ("uiName" "Tangent Breakup", "value" 100.0, "range" 0.01 1000.0)	
+		control "f_light_category" "string" ("uiName" "Light Category")
+	}
+	control "Indirect Illumination" "struct" {
+		control "use_indirect_illum" "boolean" ("uiName" "Use Indirect Illumination", "value" 1)
+		control "cInd" "color" ("uiName" "Irradiance Color", "value" 1.0 1.0 1.0)
+		control "saturation_indirect" "scalar" ("uiName" "Indirect Saturation", "value" 1.0, "range" 0.0 1.0)
+		control "path_indirect" "boolean" ("uiName" "Path Indirect Diffuse", "value" 0)
+		control "path_indirect_samples" "integer" ("uiName" "Path Indir. Diffuse Samples", "value" 4, "range" 0 512)
+		control "path_indirect_depth" "integer" ("uiName" "Path Indir. Diffuse Depths", "value" 2, "range" 0 6)
+		control "ind_ignore_bump" "boolean" ("uiName" "Ignore Bump", "value" 0)
+	}
+	control "Ambient" "struct" {
+		control "use_ambient" "boolean" ("uiName" "Use Ambient", "value" 0)
+		control "cAmb" "scalar" ("uiName" "Coefficient Ambient", "value" 0.2)
+		control "ambient_color" "color" ("uiName" "Ambient Color", "value" 1.0 1.0 1.0)
+	}
+	control "Occlusion" "struct" {
+		control "use_occlusion" "boolean" ("uiName" "Use Occlusion", "value" 0)
+		control "o_base_color" "color" ("uiName" "Base Color", "value" 1.0 1.0 1.0)
+		control "o_dirt_color" "color" ("uiName" "Dirt Color", "value" 0.0 0.0 0.0)
+		control "o_spread" "scalar" ("uiName" "Ray Spread", "value" 88.0, "range" 0.0 180.0)
+		control "o_samples" "integer" ("uiName" "Samples", "value" 16, "range" 0 256)
+		control "o_near_clip" "scalar" ("uiName" "Near Clip", "value" 10.0)
+		control "o_far_clip" "scalar" ("uiName" "Far Clip", "value" 100.0)
+		control "o_falloff_gain" "scalar" ("uiName" "Falloff Gain", "value" 1.0, "range" 0.0 1.0)
+		control "o_gamma" "scalar" ("uiName" "Gamma", "value" 1.0, "range" 0.01 50.0)
+		control "o_basis" "vector" ("uiName" "Basis Vector", "value" 0.0 0.0 0.0)
+		control "o_basis_blend" "scalar" ("uiName" "Basis Blend", "value" 0.0, "range" 0.0 1.0)
+		control "o_opacity_mode" "integer" ("uiName" "Opacity Mode", "value" 0, "range" 0 2)
+		control "o_bent_normal" "boolean" ("uiName" "Compute Bent Normal", "value" 1)
+		control "o_bent_space" "integer" ("uiName" "Bent Space", "value" 0, "range" 0 2)
+		control "o_trace_environment" "boolean" ("uiName" "Trace Environment", "value" 0)
+		control "o_inv_sec_illum" "boolean" ("uiName" "Invisible For Sec. Illum", "value" 1)	
+		control "effect_diffuse" "scalar" ("uiName" "Effect to Diffuse", "value" 0.5, "range" 0.0 1.0)	
+		control "effect_specular" "scalar" ("uiName" "Effect to Specular", "value" 0.5, "range" 0.0 1.0)
+		control "effect_indirect" "scalar" ("uiName" "Effect to Indirect Illum", "value" 0.5, "range" 0.0 1.0)
+		control "effect_ambient" "scalar" ("uiName" "Effect to Ambient", "value" 1.0, "range" 0.0 1.0)
+		control "custom_occlusion" "color" ("uiName" "Custom Occlusion", "value" 1.0 1.0 1.0)
+	}
+	control "Reflection" "struct" {
+		control "use_reflection" "boolean" ("uiName" "Use Reflection", "value" 0)
+		control "cReflect" "scalar" ("uiName" "Coefficient Reflection", "value" 0.5)
+		control "glossy_refl" "color" ("uiName" "Reflection", "value" 1.0 1.0 1.0)
+		control "shiny_refl" "scalar" ("uiName" "Shiny", "value" 0.0)
+		control "anisotropic_reflect" "boolean" ("uiName" "Anisotropic Reflect", "value" 0)
+		control "shiny_refl_u" "scalar" ("uiName" "Shiny U", "value" 5.0)
+		control "shiny_refl_v" "scalar" ("uiName" "Shiny V", "value" 100.0)
+		control "samples_refl" "integer" ("uiName" "Samples", "value" 1, "range" 0 256)
+		control "fresnel_refl" "scalar" ("uiName" "Fresnel", "value" 1.0)		
+		control "falloff_start_refl" "scalar" ("uiName" "Reflection Falloff Start", "value" 0.0)
+		control "falloff_stop_refl" "scalar" ("uiName" "Reflection Falloff Stop", "value" 0.0)
+		control "falloff_to_color_refl" "boolean" ("uiName" "Falloff to Color", "value" 0)
+		control "falloff_color_refl" "color" ("uiName" "Reflection Falloff Color", "value" 0.0 0.0 0.0)		
+		control "diff_minus_reflect" "scalar" ("uiName" "Diffuse Minus Reflection", "value" 1.0, "range" 0.0 1.0)
+		control "custom_reflect" "color" ("uiName" "Custom Reflection", "value" 0.0 0.0 0.0)
+	}
+	control "Refraction" "struct" {
+		control "use_refraction" "boolean" ("uiName" "Use Refraction", "value" 0)
+		control "cRefract" "scalar" ("uiName" "Coefficient Refraction", "value" 0.5)
+		control "glossy_refr" "color" ("uiName" "Refraction", "value" 1.0 1.0 1.0)
+		control "shiny_refr" "scalar" ("uiName" "Shiny", "value" 0.0)
+		control "anisotropic_refract" "boolean" ("uiName" "Anisotropic Refraction", "value" 0)
+		control "shiny_refr_u" "scalar" ("uiName" "Shiny U", "value" 5.0)
+		control "shiny_refr_v" "scalar" ("uiName" "Shiny V", "value" 100.0)
+		control "samples_refr" "integer" ("uiName" "Samples", "value" 1, "range" 0 256)
+		control "ior_in_refr" "scalar" ("uiName" "IOR in", "value" 1.33)
+		control "refr_absorb_in" "color" ("uiName" "Absorption In", "value" 1.0 1.0 1.0)		
+		control "ior_out_refr" "scalar" ("uiName" "IOR out", "value" 1.0)
+		control "refr_absorb_out" "color" ("uiName" "Absorption Out", "value" 1.0 1.0 1.0)		
+		control "fresnel_refr" "scalar" ("uiName" "Fresnel", "value" 1.0)		
+		control "falloff_start_refr" "scalar" ("uiName" "Refraection Falloff Start", "value" 0.0)
+		control "falloff_stop_refr" "scalar" ("uiName" "Refraction Falloff Stop", "value" 0.0)
+		control "falloff_to_color_refr" "boolean" ("uiName" "Falloff to Color", "value" 0)
+		control "falloff_color_refr" "color" ("uiName" "Refraction Falloff Color", "value" 0.0 0.0 0.0)		
+		control "diff_minus_refract" "scalar" ("uiName" "Diffuse Minus Refraction", "value" 1.0, "range" 0.0 1.0)
+		control "custom_refract" "color" ("uiName" "Custom Refraction", "value" 0.0 0.0 0.0)
+	}
+	control "Reflect/Refract Optimization" "struct" {
+		control "russian_roulette" "boolean" ("uiName" "Russian Roulette Optimization", "value" 1)
+		control "samples_decrease" "integer" ("uiName" "Samples Decrease Factor", "value" 2, "range" 0 10)
+		control "reflection_depth" "integer" ("uiName" "Reflection Depth", "value" 0, "range" 0 20)
+		control "refraction_depth" "integer" ("uiName" "Refraction Depth", "value" 0, "range" 0 20)
+	}	
+	control "Incandescence" "struct" {
+		control "use_incandescence" "boolean" ("uiName" "Use Incandescence", "value" 0)
+		control "cInc" "scalar" ("uiName" "Coefficient Incandescence", "value" 0.2)
+		control "incandescence" "scalar" ("uiName" "Incandescence", "value" 1.0 1.0 1.0)
+	}
+	control "Special Channels" "struct" {
+		control "use_SpeciaC1" "boolean" ("uiName" "Use SpecialC1", "value" 0)
+		control "specialC1" "color" ("uiName" "SpecialC1", "value" 0.0 0.0 0.0)
+		control "use_SpeciaC2" "boolean" ("uiName" "Use SpecialC2", "value" 0)
+		control "specialC2" "color" ("uiName" "SpecialC2", "value" 0.0 0.0 0.0)
+		control "use_SpeciaC3" "boolean" ("uiName" "Use SpecialC3", "value" 0)
+		control "specialC3" "color" ("uiName" "SpecialC3", "value" 0.0 0.0 0.0)
+		control "use_SpeciaC4" "boolean" ("uiName" "Use SpecialC4", "value" 0)
+		control "specialC4" "color" ("uiName" "SpecialC4", "value" 0.0 0.0 0.0)		
+	}
+	control "Normal" "struct" {
+		control "use_normal" "boolean" ("uiName" "Use Normal", "value" 0)
+		control "add_to_normal" "boolean" ("uiName" "Add to Original Normal", "value" 1)
+		control "input_normal" "vector" ("uiName" "Input Normal", "value" 0.0 0.0 0.0)
+	}	
+	control "Z" "struct" {
+		control "use_z" "boolean" ("uiName" "Use Z", "value" 1)
+		control "near" "scalar" ("uiName" "Near Clip Plane", "value" 1.0)
+		control "far" "scalar" ("uiName" "Far Clip Plane", "value" 20.0)
+		control "opacity_z" "boolean" ("uiName" "Opacity Z", "value" 1)
+		control "reflection_z" "boolean" ("uiName" "Reflection Z", "value" 1)
+		control "refraction_z" "boolean" ("uiName" "Refraction Z", "value" 1)
+		control "use_float_z" "boolean" ("uiName" "Use Float Point Z", "value" 0)
+		control "invert_z" "boolean" ("uiName" "Invert Z", "value" 0)
+	}
+	control "Custom Buffers" "struct" {
+		control "shading_pass" "boolean" ("uiName" "Shading Pass", "value" 1)
+		control "shading_buf" "integer" ("uiName" "Shading Buffer", "value" 20)
+		control "color_occlusion_pass" "boolean" ("uiName" "Color_Occlusion Pass", "value" 1)
+		control "color_occlusion_buf" "integer" ("uiName" "Color_Occlusion Buffer", "value" 21)	
+		control "diffuse_pass" "boolean" ("uiName" "Diffuse Pass", "value" 1)
+		control "diffuse_buf" "integer" ("uiName" "Diffuse Buffer", "value" 22)
+		control "diffuse_shadow_pass" "boolean" ("uiName" "Diffuse_Shadow Pass", "value" 1)
+		control "diffuse_shadow_buf" "integer" ("uiName" "Diffuse_Shadow Buffer", "value" 23)		
+		control "specular_pass" "boolean" ("uiName" "Specular Pass", "value" 1)
+		control "specular_buf" "integer" ("uiName" "Specular Buffer", "value" 24)
+		control "specular_shadow_pass" "boolean" ("uiName" "Specular_Shadow Pass", "value" 1)
+		control "specular_shadow_buf" "integer" ("uiName" "Specular_Shadow Buffer", "value" 25)	
+		control "occlusion_pass" "boolean" ("uiName" "Occlusion Pass", "value" 1)
+		control "occlusion_buf" "integer" ("uiName" "Occlusion Buffer", "value" 26)
+		control "indirect_illum_pass" "boolean" ("uiName" "Indirect_Illum Pass", "value" 1)
+		control "indirect_illum_buf" "integer" ("uiName" "Indirect_Illum Buffer", "value" 27)	
+		control "ambient_pass" "boolean" ("uiName" "Ambient Pass", "value" 1)
+		control "ambient_buf" "integer" ("uiName" "Ambient Buffer", "value" 28)
+		control "amb_occlusion_pass" "boolean" ("uiName" "Ambient Occlusion Pass", "value" 1)
+		control "amb_occlusion_buf" "integer" ("uiName" "Ambient Occlusion Buffer", "value" 29)	
+		control "reflect_pass" "boolean" ("uiName" "Reflection Pass", "value" 1)
+		control "reflect_buf" "integer" ("uiName" "Reflection Buffer", "value" 30)
+		control "refract_pass" "boolean" ("uiName" "Refraction Pass", "value" 1)
+		control "refract_buf" "integer" ("uiName" "Refraction Buffer", "value" 31)
+		control "incandescence_pass" "boolean" ("uiName" "Incandescence Pass", "value" 1)
+		control "incandescence_buf" "integer" ("uiName" "Incandescence Buffer", "value" 32)
+		control "z_pass" "boolean" ("uiName" "Z Pass", "value" 1)
+		control "z_buf" "integer" ("uiName" "Z Buffer", "value" 33)	
+		control "bent_normal_pass" "boolean" ("uiName" "Bent Normal Pass", "value" 1)
+		control "bent_normal_buf" "integer" ("uiName" "Bent Normal Buffer", "value" 34)	
+		control "specialC1_pass" "boolean" ("uiName" "SpecialC1 Pass", "value" 1)
+		control "specialC1_buf" "integer" ("uiName" "SpecialC1 Buffer", "value" 35)
+		control "specialC2_pass" "boolean" ("uiName" "SpecialC2 Pass", "value" 1)
+		control "specialC2_buf" "integer" ("uiName" "SpecialC2 Buffer", "value" 36)
+		control "specialC3_pass" "boolean" ("uiName" "SpecialC3 Pass", "value" 1)
+		control "specialC3_buf" "integer" ("uiName" "SpecialC3 Buffer", "value" 37)
+		control "specialC4_pass" "boolean" ("uiName" "SpecialC4 Pass", "value" 1)
+		control "specialC4_buf" "integer" ("uiName" "SpecialC4 Buffer", "value" 38)		
+	}
+	control "Lights" "struct" {
+		control "mode" "integer" ("uiName" "Mode", "value" 0, "range" 0 2)
+		control "lights" "array light" ("uiName" "Lights")
+	}
+	}	
+end declare
+
+declare shader
+	color "p_SpotTK" (
+	struct "Color" {
+		color		"color",    		#: default 1., 1., 1., 1.
+		scalar		"intensity",		#: default 1 softmin 0. softmax 2.
+		boolean		"emit_diffuse",		#: default 1
+		boolean		"emit_specular"		#: default 1
+	}, 
+	struct "Attenuation" {
+		integer		"atten",		#: default 0 min 0 max 6
+		scalar		"start",		#: softmin 0 softmax 100  default 1
+		scalar		"stop"			#: softmin 0 softmax 1000 default 100
+	},
+	struct "Shape" {
+		scalar		"cone",			#: min 0 max 180 default 45
+		scalar		"cone_falloff"		#: min 0.01 max 20. softmin 0.01 softmax 6. default 1.
+	},
+	struct "Shadow" {
+		boolean		"shadow",   		#: default 1
+		scalar		"transparency",		#: softmin 0 softmax 1    default 0.
+		scalar		"light_radius",		#: min 0 max 10000 softmin 0 softmax 100 default 0.
+		integer		"shadow_rays",		#: min 1 max 256 softmin 1 softmax 32 default 1
+		scalar		"threshold"		#: min 0. max 0.5 default 0.001	
+	},
+	struct "Linking" {
+		string		"light_category"
+	}
+	)
+	version 2
+	apply light
+	gui "gui_p_SpotTK" {	
+		control "Global" "Global" (
+			"uiName" "p_SpotTK",
+			"category" "Light"
+		)
+		control "Color" "struct" {
+			control "color" "color" ("uiName" "Color","value" 1.0 1.0 1.0)
+			control "intensity" "scalar" ("uiName" "Intensity", "value" 1.0)
+			control "emit_diffuse" "boolean" ("uiName" "Emit Diffuse", "value" 1)
+			control "emit_specular" "boolean" ("uiName" "Emit Specular", "value" 1)
+		}
+		control "Attenuation" "struct" {
+			control "atten" "integer" ("uiName" "Attenuation Type", "value" 0, "range" 0 6)
+			control "start" "scalar" ("uiName" "Start", "units" "world", "range" 0.0 1000000, "value" 10.0)
+			control "stop" "scalar" ("uiName" "Stop", "units" "world", "range" 0.0 1000000, "value" 500.0)
+		}
+		control "Shape" "struct" {
+			control "cone" "scalar" ("uiName" "Soft Cone Angle", "range" 0.0 180.0, "value" 45.0)
+			control "cone_falloff" "scalar" ("uiName" "Soft Cone Falloff", "range" 0.01 20.0, "value" 1.0)
+		}
+		control "Shadow" "struct" {
+			control "shadow" "boolean" ("uiName" "Shadow", "value" 1)
+			control "transparency" "scalar" ("uiName" "Shadow Transparency", "value" 0.0, "range" 0.0 1.0)
+			control "light_radius" "scalar" ("uiName" "Light Radius", "range" 0 10000, "value" 0)
+			control "shadow_rays" "integer" ("uiName" "Shadow Rays", "range" 1 256, "value" 1)
+			control "threshold" "scalar" ("uiName" "Light Threshold", "range" 0 0.5, "value" 0.001)
+		}
+		control "Shadow" "Linking" {
+                	control "light_category" "string" ("uiName" "Light Category")
+                }
+	}	
+end declare
+
+declare shader
+	color "p_PointTK" (
+	struct "Color" {
+		color		"color",    		#: default 1., 1., 1., 1.
+		scalar		"intensity",		#: default 1 softmin 0. softmax 2.
+		boolean		"emit_diffuse",		#: default 1
+		boolean		"emit_specular"		#: default 1
+	}, 
+	struct "Attenuation" {
+		integer		"atten",		#: default 0 min 0 max 6
+		scalar		"start",		#: softmin 0 softmax 100  default 1
+		scalar		"stop"			#: softmin 0 softmax 1000 default 100
+	},
+	struct "Shadow" {
+		boolean		"shadow",   		#: default 1
+		scalar		"transparency",		#: softmin 0 softmax 1    default 0.
+		scalar		"light_radius",		#: min 0 max 10000 softmin 0 softmax 100 default 0.
+		integer		"shadow_rays",		#: min 1 max 256 softmin 1 softmax 32 default 1
+		scalar		"threshold"		#: min 0. max 0.5 default 0.001	
+	},		
+	struct "Linking" {
+		string		"light_category"
+	}
+	)
+	version 2
+	apply light
+	gui "gui_p_PointTK" {	
+		control "Global" "Global" (
+			"uiName" "p_PointTK",
+			"category" "Light"
+		)
+		control "Color" "struct" {
+			control "color" "color" ("uiName" "Color","value" 1.0 1.0 1.0)
+			control "intensity" "scalar" ("uiName" "Intensity", "value" 1.0)
+			control "emit_diffuse" "boolean" ("uiName" "Emit Diffuse", "value" 1)
+			control "emit_specular" "boolean" ("uiName" "Emit Specular", "value" 1)
+		}
+		control "Attenuation" "struct" {
+			control "atten" "integer" ("uiName" "Attenuation Type", "value" 0, "range" 0 6)
+			control "start" "scalar" ("uiName" "Start", "units" "world", "range" 0.0 1000000, "value" 10.0)
+			control "stop" "scalar" ("uiName" "Stop", "units" "world", "range" 0.0 1000000, "value" 500.0)
+		}
+		control "Shadow" "struct" {
+			control "shadow" "boolean" ("uiName" "Shadow", "value" 1)
+			control "transparency" "scalar" ("uiName" "Shadow Transparency", "value" 0.0, "range" 0.0 1.0)
+			control "light_radius" "scalar" ("uiName" "Light Radius", "range" 0 10000, "value" 0)
+			control "shadow_rays" "integer" ("uiName" "Shadow Rays", "range" 1 256, "value" 1)
+			control "threshold" "scalar" ("uiName" "Light Threshold", "range" 0 0.5, "value" 0.001)
+		}		
+		control "Shadow" "Linking" {
+                	control "light_category" "string" ("uiName" "Light Category")
+                }
+	}	
+end declare
+
+declare shader
+	color "p_DirectTK" (
+	struct "Color" {
+		color		"color",    		#: default 1., 1., 1., 1.
+		scalar		"intensity",		#: default 1 softmin 0. softmax 2.
+		boolean		"emit_diffuse",		#: default 1
+		boolean		"emit_specular"		#: default 1
+	}, 	
+	struct "Shadow" {
+		boolean		"shadow",   		#: default 1
+		scalar		"transparency",		#: softmin 0 softmax 1 default 0.
+		scalar		"light_radius",		#: min 0 max 10000 softmin 0 softmax 100 default 0.
+		integer		"shadow_rays"		#: min 1 max 256 softmin 1 softmax 32 default 1
+	},	
+	struct "Linking" {
+		string		"light_category"
+	}
+	)
+	version 2
+	apply light
+	gui "gui_p_DirectTK" {	
+		control "Global" "Global" (
+			"uiName" "p_DirectTK",
+			"category" "Light"
+		)
+		control "Color" "struct" {
+			control "color" "color" ("uiName" "Color","value" 1.0 1.0 1.0)
+			control "intensity" "scalar" ("uiName" "Intensity", "value" 1.0)
+			control "emit_diffuse" "boolean" ("uiName" "Emit Diffuse", "value" 1)
+			control "emit_specular" "boolean" ("uiName" "Emit Specular", "value" 1)
+		}
+		control "Shadow" "struct" {
+			control "shadow" "boolean" ("uiName" "Shadow", "value" 1)
+			control "transparency" "scalar" ("uiName" "Shadow Transparency", "value" 0.0, "range" 0.0 1.0)
+			control "light_radius" "scalar" ("uiName" "Light Radius", "range" 0 10000, "value" 0)
+			control "shadow_rays" "integer" ("uiName" "Shadow Rays", "range" 1 256, "value" 1)
+		}	 
+		control "Shadow" "Linking" {
+                	control "light_category" "string" ("uiName" "Light Category")
+                }
+	}	
+end declare
+
+declare shader
+	"p_math_output" (
+		integer	"buffer_a",		#: shortname "ba" default 35 min 0
+		integer	"buffer_b",		#: shortname "bb" default 34 min 0
+		integer	"operation"		#: shortname "op" default 1 min 0 max 3
+	)
+	version 1
+	apply output
+end declare
+
+declare shader
+	"p_environment" (
+		scalar		"coefficient",		#: default 1. min 0. softmax 1.	
+		color		"occlusion",		#: default 1., 1., 1., 1.	
+		scalar		"spread",		#: default 30. min 0. max 180. softmax 90.
+		integer		"samples",		#: default 4 min 0 softmax 128	
+		boolean		"use_normal",		#: default 1
+		vector		"direction"
+	)
+	version 2
+	apply texture
+	gui "gui_p_environment" {
+		control "Global" "Global" (
+			"uiName" "p_environment",
+			"category" "Sample Compositing"
+		)
+	control "coefficient" "scalar" ("uiName" "Coefficient", "value" 1.0)
+	control "occlusion" "color" ("uiName" "Occlusion", "value" 1.0 1.0 1.0)
+	control "spread" "scalar" ("uiName" "Ray Spread", "value" 30.0, "range" 0.0 180.0)
+	control "samples" "integer" ("uiName" "Samples", "value" 4)
+	control "use_normal" "boolean" ("uiName" "Use Normal", "value" 1)
+	control "direction" "vector" ("uiName" "Direction", "value" 0.0 0.0 0.0)
+	}	
+end declare
+
+declare shader
+	color "p_shadow_transparency" (
+		struct "Shadow Attributes" {
+			color		"color",
+			scalar		"transp",		#: default 0.5 min 0. max 1.
+			boolean		"inverse_transp"
+		},
+		struct "Shadow Attenuation" {
+			boolean		"atten",		#: default 0
+			scalar		"start",		#: softmin 0 softmax 100  default 5.0
+			scalar		"stop",			#: softmin 0 softmax 1000 default 100.0		
+			scalar		"stop_transp"		#: default 1. min 0. max 1.
+		},
+		struct "Edginess" {
+			scalar 		"edginess"		#: default 0. min 0. max 1.
+		},
+		struct "Lights" {
+			integer		"mode",			#: default 1
+			array light	"light"
+		}
+	)
+	version 1
+	apply shadow
+	gui "gui_p_shadow_transparency" {
+		control "Global" "Global" (
+			"uiName" "p_shadow_transparency",
+			"category" "Shadow"
+		)
+	control "Shadow Attributes" "struct" {
+		control "color" "color" ("uiName" "Shadow Color", "value" 0.0 0.0 0.0)
+		control "transp" "scalar" ("uiName" "Transparency", "value" 0.5, "range" 0.0 1.0)
+		control "inverse_transp" "boolean" ("uiName" "Inverse Transparency", "value" 0)
+	}
+	control "Shadow Attenuation" "struct" {
+		control "atten" "boolean" ("uiName" "Attenuation", "value" 1)
+		control "start" "scalar" ("uiName" "Start", "value" 5.0)
+		control "stop" "scalar" ("uiName" "Stop", "value" 100.0)
+		control "stop_transp" "scalar" ("uiName" "Stop Transparency", "value" 1.0, "range" 0.0 1.0)
+	}
+	control "Edginess" "struct" {
+		control "edginess" "scalar" ("uiName" "Edginess", "value" 0.0, "range" 0.0 1.0)
+	}
+	control "Lights" "struct" {
+		control "mode" "integer" ("uiName" "Mode", "value" 1, "range" 0 2)
+		control "lights" "array light" ("uiName" "Lights")
+	}
+	}	
+end declare
+
+declare shader
+	color "p_scatter_wrap" (
+		struct "Wrap Diffuse" {
+			boolean		"enable_wrap_diffuse",	#: shortname "enwr" default 0
+			scalar		"diffuse",		#: shortname "dif" min 0. softmax 1.  default 1.
+			color		"wrap_color",		#: shortname "wrc" default 1. 1. 1. 1.
+			scalar		"wrap",			#: shortname "wr" min 0. max 1.  default 0.3
+			scalar		"term_bright",		#: shortname "tebr" min 0. softmax 1.  default 0.1
+			color		"term_color",		#: shortname "trc" default 1. 1. 1. 1.
+			scalar		"term_width"		#: shortname "tewi" min 0. max 1.  default 0.3
+		},
+		struct "Back Side Scattering" {
+			boolean		"enable_scatter",	#: shortname "ensc" default 1
+			scalar		"scatter",		#: shortname "sc" min 0. softmax 1.  default 0.4	
+			color		"scatter_color",	#: shortname "scc" default 1. 1. 1. 1.
+			scalar		"max_dist_scatter",	#: shortname "mds" min 0. softmax 2.  default 1.
+			scalar		"spread",		#: shortname "spr" default 40. min 0. max 180. softmax 90.
+			integer		"samples",		#: shortname "sa" default 1 min 0 softmax 128
+			boolean		"shadow",		#: shortname "shd" default 1
+			scalar		"shadow_blur",		#: shortname "shdb" default 0. min 0. max 100.
+			scalar		"shadow_transp"		#: shortname "shtr" default 0. min 0. max 1.
+		},
+		struct "Lights" {
+			integer		"mode",      	      	#: shortname "mo" softmin 0 softmax 2 default 0
+			array light	"lights" 		#: shortname "lig"
+		}
+	)
+	version 2
+	apply texture
+	gui "gui_p_scatter_wrap" {
+		control "Global" "Global" (
+			"uiName" "p_scatter_wrap",
+			"category" "Texture"
+		)
+	control "Wrap Diffuse" "struct" {
+		control "enable_wrap_diffuse" "boolean" ("uiName" "Enable Wrap Diffuse", "value" 0)
+		control "diffuse" "scalar" ("uiName" "Diffuse", "value" 1.0)
+		control "wrap_color" "color" ("uiName" "Wrap Color", "value" 1.0 1.0 1.0)
+		control "wrap" "scalar" ("uiName" "Wrap", "value" 0.3, "range" 0.0 1.0)
+		control "term_bright" "scalar" ("uiName" "Terminator Brightess", "value" 0.1)
+		control "term_color" "color" ("uiName" "Terminator Color", "value" 1.0 1.0 1.0)
+		control "term_width" "scalar" ("uiName" "Terminator Width", "value" 0.3, "range" 0.0 1.0)
+	}
+	control "Back Side Scattering" "struct" {
+		control "enable_scatter" "boolean" ("uiName" "Enable Scatter", "value" 1)
+		control "scatter" "scalar" ("uiName" "Scatter", "value" 0.4)
+		control "scatter_color" "color" ("uiName" "Scatter Color", "value" 1.0 1.0 1.0)
+		control "max_dist_scatter" "scalar" ("uiName" "Max Distance Scatter", "value" 10.0)
+		control "spread" "scalar" ("uiName" "Ray Spread", "value" 40.0, "range" 0.0 180.0)
+		control "samples" "integer" ("uiName" "Samples", "value" 1)
+		control "shadow" "boolean" ("uiName" "Shadow", "value" 1)
+		control "shadow_blur" "scalar" ("uiName" "Shadow Blur", "value" 0.0, "range" 0.0 100.0)
+		control "shadow_transp" "scalar" ("uiName" "Shadow Transparency", "value" 0.0, "range" 0.0 1.0)
+	}
+	control "Lights" "struct" {
+		control "mode" "integer" ("uiName" "Mode", "value" 1, "range" 0 2)
+		control "lights" "array light" ("uiName" "Lights")
+	}
+}
+end declare	
+
+declare shader
+	geometry "p_MegaTK_pass" (
+		struct "Output Settings" {
+			string 		"fname",		#: shortname "nam"
+			string 		"render_dir",		#: shortname "rdir"
+			integer 	"frame_padding",	#: shortname "frpa" softmin 1 softmax 4 default 4 min 1 max 10
+			integer		"output_format",	#: shortname "oufo" min 0 max 4
+			
+			integer 	"openexr_comp",		#: shortname "exrc" min 0 max 5
+			integer 	"openexr_format",	#: shortname "exrf" min 0 max 1
+			
+			boolean 	"filter_pass"		#: shortname "fipa" default 1
+		},
+		struct "Mental Ray Standart Channels" {
+			boolean 	"mr_color_pass",	#: shortname "rgbp" default 1	
+			integer 	"mr_color_format",	#: shortname "rgbf" default 0 min 0 max 1
+			boolean 	"mr_z_pass",		#: shortname "zp" default 0
+			integer 	"mr_z_format",		#: shortname "zf" default 0 min 0 max 4
+			boolean 	"mr_normal_pass",	#: shortname "norp" default 0
+			integer 	"mr_normal_format",	#: shortname "norf" default 0 min 0 max 4
+			boolean 	"mr_motion_pass",	#: shortname "motp" default 0
+			integer 	"mr_motion_format",	#: shortname "motf" default 0 min 0 max 4
+			boolean 	"mr_label_pass",	#: shortname "labp" default 0
+			integer		"mr_label_format",	#: shortname "labf" default 0 min 0 max 4
+			boolean 	"mr_coverage_pass",	#: shortname "covp" default 0
+			integer 	"mr_coverage_format"	#: shortname "covf" default 5 min 0 max 5		
+		},
+		struct "Output Passes and Buffers" {
+			boolean 	"shading_pass",		#: shortname "shpa" default 1
+			integer		"shading_buf",		#: shortname "shbu" default 20 min 0 		
+			boolean 	"color_occlusion_pass",	#: shortname "copa" default 1
+			integer		"color_occlusion_buf",	#: shortname "cobu" default 21 min 0 
+			boolean 	"diffuse_pass",		#: shortname "dipa" default 1
+			integer		"diffuse_buf",		#: shortname "dibu" default 22 min 0
+			boolean 	"diffuse_shadow_pass",	#: shortname "dispa" default 1
+			integer		"diffuse_shadow_buf",	#: shortname "disbu" default 23 min 0
+			boolean 	"specular_pass",	#: shortname "sppa" default 1
+			integer		"specular_buf",		#: shortname "spbu" default 24 min 0
+			boolean 	"specular_shadow_pass",	#: shortname "sshpa" default 1
+			integer		"specular_shadow_buf",	#: shortname "sshbu" default 25 min 0
+			boolean 	"occlusion_pass",	#: shortname "ocpa" default 0
+			integer		"occlusion_buf",	#: shortname "ocbu" default 26 min 0
+			boolean 	"indirect_illum_pass",	#: shortname "indpa" default 0
+			integer		"indirect_illum_buf",	#: shortname "indbu" default 27 min 0
+			boolean 	"ambient_pass",		#: shortname "ampa" default 0
+			integer		"ambient_buf",		#: shortname "ambu" default 28 min 0	
+			boolean 	"amb_occlusion_pass",	#: shortname "aopa" default 0
+			integer		"amb_occlusion_buf",	#: shortname "aobu" default 29 min 0		
+			boolean 	"reflect_pass",		#: shortname "rflpa" default 0		
+			integer		"reflect_buf",		#: shortname "rflbu" default 30 min 0
+			boolean 	"refract_pass",		#: shortname "rfrpa" default 0
+			integer		"refract_buf",		#: shortname "rfrbu" default 31 min 0
+			boolean 	"incandescence_pass",	#: shortname "incpa" default 0
+			integer		"incandescence_buf",	#: shortname "incbu" default 32 min 0
+			boolean 	"z_pass",		#: shortname "zpa" default 0
+			integer		"z_buf",		#: shortname "zbu" default 33 min 0		
+			boolean 	"bent_normal_pass",	#: shortname "bnpa" default 0
+			integer		"bent_normal_buf",	#: shortname "bnbu" default 34 min 0	
+			boolean 	"specialC1_pass",	#: shortname "sc1pa" default 0
+			integer		"specialC1_buf",	#: shortname "sc1bu" default 35 min 0
+			boolean 	"specialC2_pass",	#: shortname "sc2pa" default 0
+			integer		"specialC2_buf",	#: shortname "sc2bu" default 36 min 0
+			boolean 	"specialC3_pass",	#: shortname "sc3pa" default 0
+			integer		"specialC3_buf",	#: shortname "sc3bu" default 37 min 0
+			boolean 	"specialC4_pass",	#: shortname "sc4pa" default 0
+			integer		"specialC4_buf"		#: shortname "sc4bu" default 38 min 0			
+		}
+	)
+	version 1
+	apply geometry
+	gui "gui_p_MegaTK_pass" {
+		control "Global" "Global" (
+			"uiName" "p_MegaTK_pass",
+			"category" "Geometry"
+		)
+	control "Output Settings" "struct" {
+		control "fname" "string" ("uiName" "File Name:")
+		control "render_dir" "string" ("uiName" "Render Dir:")
+		control "frame_padding" "integer" ("uiName" "Frame Padding", "value" 4, "range" 0 10)
+		control "output_format" "integer" ("uiName" "Output Format", "value" 0, "range" 0 4)
+		control "openexr_comp" "integer" ("uiName" "OpenEXR Compression", "value" 0, "range" 0 5)
+		control "openexr_format" "integer" ("uiName" "OpenEXR Format", "value" 0, "range" 0 1)
+		control "filter_pass" "boolean" ("uiName" "Enable Filter Passes", "value" 1)
+	}	
+	control "Mental Ray Standart Channels" "struct" {
+		control "mr_color_pass" "boolean" ("uiName" "RGBA Pass", "value" 1)
+		control "mr_color_format" "integer" ("uiName" "RGBA Format", "value" 0, "range" 0 1)
+		control "mr_z_pass" "boolean" ("uiName" "Z Pass", "value" 0)
+		control "mr_z_format" "integer" ("uiName" "Z Format", "value" 0, "range" 0 4)
+		control "mr_normal_pass" "boolean" ("uiName" "Normal Pass", "value" 0)
+		control "mr_normal_format" "integer" ("uiName" "Normal Format", "value" 0, "range" 0 4)			
+		control "mr_motion_pass" "boolean" ("uiName" "Motion Pass", "value" 0)
+		control "mr_motion_format" "integer" ("uiName" "Motion Format", "value" 0, "range" 0 4)
+		control "mr_label_pass" "boolean" ("uiName" "Label(TAG) Pass", "value" 0)
+		control "mr_label_format" "integer" ("uiName" "Label(TAG) Format", "value" 0, "range" 0 4)			
+		control "mr_coverage_pass" "boolean" ("uiName" "Coverage Pass", "value" 0)
+		control "mr_coverage_format" "integer" ("uiName" "Coverage Format", "value" 5, "range" 0 5)
+	}
+	control "Output Passes and Buffers" "struct" {
+		control "shading_pass" "boolean" ("uiName" "Shading Pass", "value" 1)
+		control "shading_buf" "integer" ("uiName" "Shading Buffer", "value" 20)
+		control "color_occlusion_pass" "boolean" ("uiName" "Color Pass", "value" 1)
+		control "color_occlusion_buf" "integer" ("uiName" "Color Buffer", "value" 21)		
+		control "diffuse_pass" "boolean" ("uiName" "Diffuse Pass", "value" 1)
+		control "diffuse_buf" "integer" ("uiName" "Diffuse Buffer", "value" 22)		
+		control "diffuse_shadow_pass" "boolean" ("uiName" "Shadow Pass", "value" 1)
+		control "diffuse_shadow_buf" "integer" ("uiName" "Shadow Buffer", "value" 23)		
+		control "specular_pass" "boolean" ("uiName" "Specular Pass", "value" 1)
+		control "specular_buf" "integer" ("uiName" "Specular Buffer", "value" 24)		
+		control "specular_shadow_pass" "boolean" ("uiName" "Specular_Shadow Pass", "value" 1)
+		control "specular_shadow_buf" "integer" ("uiName" "Specular_Shadow Buffer", "value" 25)		
+		control "occlusion_pass" "boolean" ("uiName" "Diffuse Occlusion Pass", "value" 1)
+		control "occlusion_buf" "integer" ("uiName" "Diffuse Occlusion Buffer", "value" 26)		
+		control "indirect_illum_pass" "boolean" ("uiName" "Indirect Illum Pass", "value" 0)
+		control "indirect_illum_buf" "integer" ("uiName" "Indirect Illum Buffer", "value" 27)		
+		control "ambient_pass" "boolean" ("uiName" "Ambient Pass", "value" 0)
+		control "ambient_buf" "integer" ("uiName" "Ambient Buffer", "value" 28)		
+		control "amb_occlusion_pass" "boolean" ("uiName" "Ambient Occlusion Pass", "value" 0)
+		control "amb_occlusion_buf" "integer" ("uiName" "Ambient Occlusion Buffer", "value" 29)		
+		control "reflect_pass" "boolean" ("uiName" "Reflect Pass", "value" 0)
+		control "reflect_buf" "integer" ("uiName" "Reflect Buffer", "value" 30)		
+		control "refract_pass" "boolean" ("uiName" "Refract Pass", "value" 0)
+		control "refract_buf" "integer" ("uiName" "Refract Buffer", "value" 31)		
+		control "incandescence_pass" "boolean" ("uiName" "Incandescence Pass", "value" 0)
+		control "incandescence_buf" "integer" ("uiName" "Incandescence Buffer", "value" 32)		
+		control "z_pass" "boolean" ("uiName" "Z Pass", "value" 0)
+		control "z_buf" "integer" ("uiName" "Z Buffer", "value" 33)		
+		control "bent_normal_pass" "boolean" ("uiName" "Bent Normal Pass", "value" 0)
+		control "bent_normal_buf" "integer" ("uiName" "Bent Normal Buffer", "value" 34)		
+		control "specialC1_pass" "boolean" ("uiName" "SpecialC1 Pass", "value" 0)
+		control "specialC1_buf" "integer" ("uiName" "SpecialC1 Buffer", "value" 35)
+		control "specialC2_pass" "boolean" ("uiName" "SpecialC2 Pass", "value" 0)
+		control "specialC2_buf" "integer" ("uiName" "SpecialC2 Buffer", "value" 36)
+		control "specialC3_pass" "boolean" ("uiName" "SpecialC3 Pass", "value" 0)
+		control "specialC3_buf" "integer" ("uiName" "SpecialC3 Buffer", "value" 37)
+		control "specialC4_pass" "boolean" ("uiName" "SpecialC4 Pass", "value" 0)
+		control "specialC4_buf" "integer" ("uiName" "SpecialC4 Buffer", "value" 38)		
+	}
+	}
+end declare
+
+declare shader
+         "p_OpenEXR_saver"
+	 (
+		string 		"fileName",		#: shortname "fn"
+		integer		"compression",		#: shortname "c" min 0 max 5
+		boolean 	"rgbaPass",		#: shortname "cp" default 1
+		integer		"rgbaFormat",		#: shortname "cf" min 0 max 2 default 1
+		boolean 	"zPass",		#: shortname "zp" default 1
+		integer		"zFormat",		#: shortname "zf" min 0 max 2 default 1
+		boolean 	"nPass",		#: shortname "np" default 1
+		integer		"nFormat",		#: shortname "nf" min 0 max 2  default 1
+		boolean 	"mPass",		#: shortname "mp" default 1 
+		integer		"mFormat",		#: shortname "mf" min 0 max 2 default 1
+		boolean 	"tPass",		#: shortname "tvp" default 1
+		integer		"tFormat",		#: shortname "tvf" min 0 max 2 default 1		
+		boolean 	"cPass",		#: shortname "cvp" default 1
+		integer		"cFormat",		#: shortname "cvf" min 0 max 2 default 1
+		boolean 	"shadingPass",		#: shortname "shp" default 1
+		integer		"shadingBuffer",	#: shortname "shb" default 20 min 0
+		integer		"shadingFormat",	#: shortname "shf" min 0 max 2 default 1
+		boolean 	"colorPass",		#: shortname "cop" default 1
+		integer		"colorBuffer",		#: shortname "cob" default 21 min 0
+		integer		"colorFormat",		#: shortname "cof" min 0 max 2 default 1
+		boolean 	"diffusePass",		#: shortname "dp" default 1
+		integer		"diffuseBuffer",	#: shortname "db" default 22 min 0
+		integer		"diffuseFormat",	#: shortname "df" min 0 max 2 default 1
+		boolean 	"diffuseShadowPass",	#: shortname "dsp" default 1
+		integer		"diffuseShadowBuffer",	#: shortname "dsb" default 23 min 0
+		integer		"diffuseShadowFormat",	#: shortname "dsf" min 0 max 2 default 1
+		boolean 	"specularPass",		#: shortname "spp" default 1
+		integer		"specularBuffer",	#: shortname "spb" default 24 min 0
+		integer		"specularFormat",	#: shortname "spf" min 0 max 2 default 1
+		boolean 	"specularShadowPass",	#: shortname "ssp" default 1
+		integer		"specularShadowBuffer",	#: shortname "ssb" default 25 min 0
+		integer		"specularShadowFormat",	#: shortname "ssf" min 0 max 2 default 1
+		boolean 	"diffuseOcclusionPass",	#: shortname "op" default 0
+		integer		"diffuseOcclusionBuffer",	#: shortname "ob" default 26 min 0
+		integer		"diffuseOcclusionFormat",	#: shortname "of" min 0 max 2 default 1
+		boolean 	"indirectIllumPass",	#: shortname "iip" default 0
+		integer		"indirectIllumBuffer",	#: shortname "iib" default 27 min 0
+		integer		"indirectIllumFormat",	#: shortname "iif" min 0 max 2 default 1
+		boolean 	"ambientPass",		#: shortname "ap" default 0
+		integer		"ambientBuffer",	#: shortname "ab" default 28 min 0	
+		integer		"ambientFormat",	#: shortname "af" min 0 max 2 default 1
+		boolean 	"ambOcclusionPass",	#: shortname "aop" default 0
+		integer		"ambOcclusionBuffer",	#: shortname "aob" default 29 min 0		
+		integer		"ambOcclusionFormat",	#: shortname "aof" min 0 max 2 default 1
+		boolean 	"reflectPass",		#: shortname "rlp" default 0		
+		integer		"reflectBuffer",	#: shortname "rlb" default 30 min 0
+		integer		"reflectFormat",	#: shortname "rlf" min 0 max 2 default 1
+		boolean 	"refractPass",		#: shortname "rrp" default 0
+		integer		"refractBuffer",	#: shortname "rrb" default 31 min 0
+		integer		"refractFormat",	#: shortname "rrf" min 0 max 2 default 1
+		boolean 	"incandescencePass",	#: shortname "ip" default 0
+		integer		"incandescenceBuffer",	#: shortname "ib" default 32 min 0
+		integer		"incandescenceFormat",	#: shortname "if" min 0 max 2 default 1
+		boolean 	"depthPass",		#: shortname "dep" default 0
+		integer		"depthBuffer",		#: shortname "deb" default 33 min 0		
+		integer		"depthFormat",		#: shortname "def" min 0 max 2 default 1
+		boolean 	"bentNormalPass",	#: shortname "bnp" default 0
+		integer		"bentNormalBuffer",	#: shortname "bnb" default 34 min 0	
+		integer		"bentNormalFormat",	#: shortname "bnf" min 0 max 2 default 1
+		boolean 	"specialC1Pass",	#: shortname "s1p" default 0
+		integer		"specialC1Buffer",	#: shortname "s1b" default 35 min 0
+		integer		"specialC1Format",	#: shortname "s1f" min 0 max 2 default 1
+		boolean 	"specialC2Pass",	#: shortname "s2p" default 0
+		integer		"specialC2Buffer",	#: shortname "s2b" default 36 min 0
+		integer		"specialC2Format",	#: shortname "s2f" min 0 max 2 default 1
+		boolean 	"specialC3Pass",	#: shortname "s3p" default 0
+		integer		"specialC3Buffer",	#: shortname "s3b" default 37 min 0
+		integer		"specialC3Format",	#: shortname "s3f" min 0 max 2 default 1
+		boolean 	"specialC4Pass",	#: shortname "s4p" default 0
+		integer		"specialC4Buffer",	#: shortname "s4b" default 38 min 0
+		integer		"specialC4Format"	#: shortname "s4f" min 0 max 2 default 1		
+	 )
+	apply output
+	version 3
+end declare
+
+declare shader
+	color "p_float4_to_color" (
+		scalar		"color_R",		#: shortname "cor" default 0. softmin 0. softmax 1.
+		scalar		"color_G",		#: shortname "cog" default 0. softmin 0. softmax 1.
+		scalar		"color_B",		#: shortname "cob" default 0. softmin 0. softmax 1.
+		scalar		"color_A",		#: shortname "coa" default 0. softmin 0. softmax 1.
+		boolean		"clamp_black",		#: shortname "clb" default 0
+		boolean		"clamp_white"		#: shortname "clw" default 0
+	)
+	version 2
+	apply texture
+	gui "gui_p_float4_to_color" {
+		control "Global" "Global" (
+			"uiName" "p_float4_to_color",
+			"category" "Conversion"
+		)
+		control "color_R" "scalar" ("uiName" "Color R", "value" 0.0)
+		control "color_G" "scalar" ("uiName" "Color G", "value" 0.0)
+		control "color_B" "scalar" ("uiName" "Color B", "value" 0.0)
+		control "color_A" "scalar" ("uiName" "Color A", "value" 0.0)
+		control "clamp_black" "boolean" ("uiName" "Clamp Black", "value" 0)
+		control "clamp_white" "boolean" ("uiName" "Clamp White", "value" 0)
+	}	
+end declare
+
+declare shader
+	struct {
+		scalar		"out_U",			#: shortname "ou"
+		scalar		"out_V"				#: shortname "ov"
+	}
+	"p_float2_to_vector" (
+		scalar		"input_U",		#: shortname "inu"
+		scalar		"input_V"		#: shortname "inv"
+	)
+	version 2
+	apply texture
+	gui "gui_p_float2_to_vector" {
+		control "Global" "Global" (
+			"uiName" "p_float2_to_vector",
+			"category" "Conversion"
+		)
+		control "input_U" "scalar" ("uiName" "Input U", "value" 0.0)
+		control "input_V" "scalar" ("uiName" "Input V", "value" 0.0)
+	}
+end declare
+
+declare shader
+	vector	"p_float3_to_vector" (
+		scalar		"input_X",		#: shortname "inx"
+		scalar		"input_Y",		#: shortname "iny"
+		scalar		"input_Z"		#: shortname "inz"
+	)
+	version 2
+	apply texture
+	gui "gui_p_float3_to_vector" {
+		control "Global" "Global" (
+			"uiName" "p_float3_to_vector",
+			"category" "Conversion"
+		)
+		control "input_X" "scalar" ("uiName" "input X", "value" 0.0)
+		control "input_Y" "scalar" ("uiName" "input Y", "value" 0.0)
+		control "input_Z" "scalar" ("uiName" "input Z", "value" 0.0)
+	}	
+end declare
+
+declare shader
+        color "p_grade_color" (	
+	   	color 		"input",		#: default 0.5 0.5 0.5 1.0
+	   	color 		"pointBlack",		#: default 0. 0. 0.
+	   	color 		"pointWhite",		#: default 1. 1. 1.
+	   	color 		"saturation",		#: default 1. 1. 1. min 0. 0. 0. max 10. 10. 10.
+	   	integer 	"saturation_mode",	#: default 1 min 0 max 1
+	  	scalar 		"gain",			#: default 1. softmin 0. softmax 2.
+	   	scalar 		"gamma",		#: default 1. min 0. max 20. softmin 0.01 softmax 4.
+	   	color 		"mult",			#: default 1. 1. 1. 
+	   	color 		"offset",		#: default 0. 0. 0.
+	   	boolean 	"clampBlack",		#: default 1
+	  	boolean 	"clampWhite",		#: default 0
+   		boolean 	"invert"		#: default 0
+	)
+        version 2
+        apply texture
+	gui "gui_p_grade_color" {
+		control "Global" "Global" (
+			"uiName" "p_grade_color",
+			"category" "Conversion"
+		)
+		control "input" "color" ("uiName" "Input Color", "value" 0.5 0.5 0.5)
+		control "pointBlack" "color" ("uiName" "Point Black", "value" 0.0 0.0 0.0)
+		control "pointWhite" "color" ("uiName" "Point White", "value" 1.0 1.0 1.0)
+		control "saturation" "color" ("uiName" "Saturation", "value" 1.0 1.0 1.0)
+		control "saturation_mode" "integer" ("uiName" "Saturation Mode", "value" 1, "range" 0 1)
+		control "gain" "scalar" ("uiName" "Gain", "value" 1)
+		control "gamma" "scalar" ("uiName" "Gamma", "value" 1.0, "range" 0.01 20.0)
+		control "mult" "color" ("uiName" "Multiply", "value" 1.0 1.0 1.0)
+		control "offset" "color" ("uiName" "Offset", "value" 0.0 0.0 0.0)
+		control "clampBlack" "boolean" ("uiName" "Clamp Black", "value" 1)
+		control "clampWhite" "boolean" ("uiName" "Clamp White", "value" 0)
+		control "invert" "boolean" ("uiName" "Invert", "value" 0)
+	}
+end declare
+
+$endif # if not "shaders_p_mi_included"
